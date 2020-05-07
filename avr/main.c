@@ -101,9 +101,9 @@ MENU_CMD(ssm_3, "SUB STOP DEMO 3",  sm_3,   ssm_2,  NONE,   done);
  */
 static uint8_t get_pins(void)
 {
-    uint8_t pin = ~PINC & 0x7F;
+    uint8_t pin = ~PINC & 0x3F;
     _delay_ms(10);
-    if (pin != (~PINC & 0x7F))
+    if (pin != (~PINC & 0x3F))
         return 0;
     else
         return pin;
@@ -168,7 +168,7 @@ void last_func(void); // завершающая функция
 int main (void)
 {
     // примитивная настройка портов
-    PORTC = 0xFF;
+    PORTC = 0x3F;
     DDRD = 0xFF;
     // инициализация модуля вывода
     first_func();
