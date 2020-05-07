@@ -1,38 +1,50 @@
 # Output file name
-TARG     = testFlexMenu
+PROJECT     = avr_fmenu
 
-# MCU name and frequency
 MCU      = atmega328p
 F_CPU    = 16000000
 
+C_DEFS += -D_$(MCU)
+C_DEFS += -DPLACE_CONST_IN_FLASH
+
+FMENU = ../fmenu
+
 # Source files
-SRCS     += main.c
-SRCS     += com_io.c
-SRCS     += terminal_out.c
+C_SOURCES     += main.c
+C_SOURCES     += com_io.c
+C_SOURCES     += terminal_out.c
+C_SOURCES     += $(FMENU)/fmenu.c
+C_SOURCES     += $(FMENU)/fproperty.c
 
-SRCS     += ../fmenu/fmenu.c
-SRCS     += ../fmenu/fproperty.c
+C_INCLUDES += \
+  -I$(FMENU) \
+  -I.
 
-# Defines
-DEFINES = -D_$(MCU)
 
-# Build directory
-BUILDDIR = build
+# Build options
+BUILD_DIR = build
 
-# Compiler options
-OPTIMIZE = -Os -mcall-prologues -fshort-enums -ffunction-sections -fdata-sections -ffreestanding -flto
-WARNLEVEL = -Wall -Werror
-CFLAGS = $(WARNLEVEL) -lm $(OPTIMIZE) -mmcu=$(MCU) -DF_CPU=$(F_CPU)
-CFLAGS += -MMD -MP -MT $(BUILDDIR)/$(*F).o -MF $(BUILDDIR)/$(*D)/$(*F).d
-LDFLAGS = $(WARNLEVEL) -mmcu=$(MCU) -Wl,--gc-sections -Wl,--relax
+OPT = -Os
+WARN = -Wall
 
-CFLAGS += -I.
-CFLAGS += -I../fmenu
+MCU_FLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU)
+OPT_FLAGS = $(OPT) -mcall-prologues -fshort-enums -ffunction-sections -fdata-sections -ffreestanding
+#OPT_FLAGS += -flto
+CFLAGS += $(MCU_FLAGS) $(C_DEFS) $(C_INCLUDES) $(OPT_FLAGS) $(WARN)
 
-# AVR toolchain
-CC       = avr-gcc
-OBJCOPY  = avr-objcopy
-OBJDUMP  = avr-objdump
+# Dependency information
+CFLAGS += -MMD -MP -MT $(BUILD_DIR)/$(*F).o -MF $(BUILD_DIR)/$(*D)/$(*F).d
+
+LDFLAGS =  $(MCU_FLAGS) $(WARN) -Wl,--gc-sections -Wl,--relax
+
+# Toolchain definitions
+PREFIX = avr-
+CC = $(PREFIX)gcc
+AS = $(PREFIX)gcc -x assembler-with-cpp
+CP = $(PREFIX)objcopy
+OD = $(PREFIX)objdump
+AR = $(PREFIX)ar
+SZ = $(PREFIX)size
 
 # Avrdude parameters
 AVRDUDE  = avrdude
@@ -42,9 +54,9 @@ AD_MCU   = -p $(MCU)
 
 AD_CMDLINE = $(AD_MCU) $(AD_PROG) $(AD_PORT) -V -B 0.5
 
-OBJS = $(addprefix $(BUILDDIR)/, $(SRCS:.c=.o))
-ELF = $(BUILDDIR)/$(TARG).elf
-HEX = flash/$(TARG).hex
+OBJS = $(addprefix $(BUILD_DIR)/, $(C_SOURCES:.c=.o))
+ELF = $(BUILD_DIR)/$(PROJECT).elf
+HEX = flash/$(PROJECT).hex
 
 all: $(HEX) size
 
@@ -52,19 +64,19 @@ $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex -R .eeprom -R .nwram $(ELF) $(HEX)
 
 $(ELF): $(OBJS)
-	@mkdir -p $(BUILDDIR) flash
+	@mkdir -p $(BUILD_DIR) flash
 	$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-	$(OBJDUMP) -h -S $(ELF) > $(BUILDDIR)/$(TARG).lss
+	$(OBJDUMP) -h -S $(ELF) > $(BUILD_DIR)/$(PROJECT).lss
 
 size: $(ELF)
 	@sh ./size.sh $(ELF)
 
-$(BUILDDIR)/%.o: %.c
+$(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(DEFINES) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf $(BUILDDIR)
+		rm -rf $(BUILD_DIR)
 
 .PHONY: flash
 flash: $(ELF)
