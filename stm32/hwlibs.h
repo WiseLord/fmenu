@@ -13,6 +13,7 @@ extern "C" {
 #include <stm32f1xx_ll_rcc.h>
 #include <stm32f1xx_ll_system.h>
 #include <stm32f1xx_ll_usart.h>
+#include <stm32f1xx_ll_utils.h>
 
 #endif
 

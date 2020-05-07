@@ -25,12 +25,21 @@
 
 static char tmpstr[DISPLAY_WIDTH + 1];
 
-#if defined(ENABLE_I16_PROPERTIES) || defined(ENABLE_U16_PROPERTIES)
+#if defined (__AVR__)
+
+#if (defined(ENABLE_I16_PROPERTIES) || defined(ENABLE_U16_PROPERTIES))
 typedef int32_t big_int;
 #define ITOA(x,y,z) ltoa(x,y,z)
 #else
 typedef int16_t big_int;
 #define ITOA(x,y,z) itoa(x,y,z)
+#endif
+
+#else
+
+typedef int32_t big_int;
+#define ITOA(x,y,z) __itoa(x,y,z)
+
 #endif
 
 static char *num_text(big_int num)

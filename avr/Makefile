@@ -61,12 +61,12 @@ HEX = flash/$(PROJECT).hex
 all: $(HEX) size
 
 $(HEX): $(ELF)
-	$(OBJCOPY) -O ihex -R .eeprom -R .nwram $(ELF) $(HEX)
+	$(CP) -O ihex -R .eeprom -R .nwram $(ELF) $(HEX)
 
 $(ELF): $(OBJS)
 	@mkdir -p $(BUILD_DIR) flash
 	$(CC) $(LDFLAGS) -o $(ELF) $(OBJS)
-	$(OBJDUMP) -h -S $(ELF) > $(BUILD_DIR)/$(PROJECT).lss
+	$(OD) -h -S $(ELF) > $(BUILD_DIR)/$(PROJECT).lss
 
 size: $(ELF)
 	@sh ./size.sh $(ELF)

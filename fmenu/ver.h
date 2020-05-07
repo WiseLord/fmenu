@@ -60,6 +60,10 @@
 #define _mem const
 #endif
 
+#ifndef __AVR__
+#define __memx
+#endif
+
 /// указатель на константный символ
 typedef _mem char *pchar_f;
 /// строка константных символов

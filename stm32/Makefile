@@ -28,6 +28,7 @@ C_SOURCES += \
   drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_gpio.c \
   drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_rcc.c \
   drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_usart.c \
+  drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_utils.c \
   system/system_$(call lc, $(STM32_FAMILY))xx.c
 
 C_INCLUDES += \
@@ -77,7 +78,7 @@ ASFLAGS += $(MCU_FLAGS) $(AS_DEFS) $(WARN)
 # Dependency information
 CFLAGS += -MMD -MP -MT $(OBJ_DIR)/$(*F).o -MF $(OBJ_DIR)/$(*D)/$(*F).d
 
-LDSCRIPT = ../common/system/$(call lc, STM32$(STM32_MCU))_flash.ld
+LDSCRIPT = system/$(call lc, STM32$(STM32_MCU))_flash.ld
 LIBS = -lc -lm -lnosys
 LIBDIR =
 LDFLAGS = $(MCU_FLAGS) -specs=nosys.specs -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
