@@ -1,3 +1,4 @@
 build*
 *.creator.user*
 *.hex
+flash/*

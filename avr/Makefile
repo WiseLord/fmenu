@@ -23,6 +23,7 @@ C_INCLUDES += \
 
 # Build options
 BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
 
 OPT = -Os
 WARN = -Wall
@@ -33,7 +34,7 @@ OPT_FLAGS = $(OPT) -mcall-prologues -fshort-enums -ffunction-sections -fdata-sec
 CFLAGS += $(MCU_FLAGS) $(C_DEFS) $(C_INCLUDES) $(OPT_FLAGS) $(WARN)
 
 # Dependency information
-CFLAGS += -MMD -MP -MT $(BUILD_DIR)/$(*F).o -MF $(BUILD_DIR)/$(*D)/$(*F).d
+CFLAGS += -MMD -MP -MT $(OBJ_DIR)/$(*F).o -MF $(OBJ_DIR)/$(*D)/$(*F).d
 
 LDFLAGS =  $(MCU_FLAGS) $(WARN) -Wl,--gc-sections -Wl,--relax
 
@@ -54,7 +55,7 @@ AD_MCU   = -p $(MCU)
 
 AD_CMDLINE = $(AD_MCU) $(AD_PROG) $(AD_PORT) -V -B 0.5
 
-OBJS = $(addprefix $(BUILD_DIR)/, $(C_SOURCES:.c=.o))
+OBJS = $(addprefix $(OBJ_DIR)/, $(C_SOURCES:.c=.o))
 ELF = $(BUILD_DIR)/$(PROJECT).elf
 HEX = flash/$(PROJECT).hex
 
@@ -71,7 +72,7 @@ $(ELF): $(OBJS)
 size: $(ELF)
 	@sh ./size.sh $(ELF)
 
-$(BUILD_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c Makefile
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
