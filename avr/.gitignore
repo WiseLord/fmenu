@@ -2,3 +2,5 @@ build*
 *.creator.user*
 *.hex
 flash/*
+*.cflags
+*.cxxflags
