@@ -3,5 +3,3 @@ drivers/CMSIS/Device/ST/STM32F1xx/Include
 drivers/CMSIS/Include
 drivers/STM32F1xx_HAL_Driver/Inc
 ../fmenu
-system
-drivers/STM32F1xx_HAL_Driver/Src
