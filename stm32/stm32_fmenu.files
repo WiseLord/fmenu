@@ -23,10 +23,16 @@ drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_gpio.c
 drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_rcc.c
 drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usart.c
 drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_utils.c
-hwlibs.h
+eeprom.c
+eeprom.h
 main.c
+stm_helper.c
+stm_helper.h
 system/startup_stm32f103xb.s
 system/stm32f103cb_flash.ld
 system/stm32f103xb_openocd_jlink.cfg
 system/stm32f103xb_openocd_stlink.cfg
 system/system_stm32f1xx.c
+terminal_out.c
+usart.c
+usart.h

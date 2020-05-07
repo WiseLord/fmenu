@@ -20,6 +20,8 @@ extern "C" {
 #define USART_DBG               USART1
 #define USART_DBG_HANDLER       USART1_IRQHandler
 
+void sysInit(void);
+
 #ifdef __cplusplus
 }
 #endif

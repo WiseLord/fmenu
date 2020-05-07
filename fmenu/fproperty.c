@@ -19,6 +19,8 @@
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
 #include <util/atomic.h>
+#else
+#include "eeprom.h"
 #endif
 
 #if defined(ENABLE_PROPERTIES)

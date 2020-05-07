@@ -8,6 +8,11 @@ C_DEFS += -DUSE_FULL_LL_DRIVER
 FMENU = ../fmenu
 
 C_SOURCES += main.c
+
+C_SOURCES += eeprom.c
+C_SOURCES += stm_helper.c
+C_SOURCES += terminal_out.c
+C_SOURCES += usart.c
 C_SOURCES += $(FMENU)/fmenu.c
 C_SOURCES += $(FMENU)/fproperty.c
 
