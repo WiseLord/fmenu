@@ -14,10 +14,12 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <util/atomic.h>
 
+#ifdef __AVR__
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
+#include <util/atomic.h>
+#endif
 
 #if defined(ENABLE_PROPERTIES)
 
@@ -39,6 +41,8 @@ static char *num_text(big_int num)
 
 static char *hex_text(big_int num, uint8_t dig)
 {
+    (void)dig;
+
     ITOA(num, tmpstr, 16);
     return tmpstr;
 }
@@ -109,7 +113,7 @@ static big_int default_val(big_int d, big_int min, big_int max)
     return d;
 }
 
-#if defined(ENABLE_ATOMIC_CHANGE_PROPERTIES)
+#if defined(__AVR__) && defined(ENABLE_ATOMIC_CHANGE_PROPERTIES)
 #define atom ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 #else
 #define atom

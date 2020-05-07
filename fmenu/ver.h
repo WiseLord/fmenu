@@ -51,7 +51,8 @@
  *
  */
 
-#if defined(PLACE_CONST_IN_FLASH)
+
+#if defined(__AVR__) && defined(PLACE_CONST_IN_FLASH)
 /// префикс для размещения констант в ОЗУ или FLASH
 #define _mem const __flash
 #else
